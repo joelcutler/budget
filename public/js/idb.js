@@ -19,8 +19,13 @@ request.onsuccess = function (event) {
   // check if app is online, if yes run uploadTransaction() function to send all local db data to api
   if (navigator.onLine) {
     // we haven't created this yet, but we will soon, so let's comment it out for now
-    // uploadTransaction();
+    uploadTransaction();
   }
+};
+
+request.onerror = function (event) {
+  // log error here
+  console.log(event.target.errorCode);
 };
 
 // This function will be executed if we attempt to submit a new transaction and there's no internet connection
@@ -29,26 +34,21 @@ function saveRecord(record) {
   const transaction = db.transaction(["new_transaction"], "readwrite");
 
   // access the object store for `new_transaction`
-  const budgetObjectStore = transaction.objectStore("new_transaction");
+  const transactionObjectStore = transaction.objectStore("new_transaction");
 
   // add record to your store with add method
-  budgetObjectStore.add(record);
+  transactionObjectStore.add(record);
 }
-
-request.onerror = function (event) {
-  // log error here
-  console.log(event.target.errorCode);
-};
 
 function uploadtransaction() {
   // open a transaction on your db
   const transaction = db.transaction(["new_transaction"], "readwrite");
 
   // access your object store
-  const budgetObjectStore = transaction.objectStore("new_transaction");
+  const transactionObjectStore = transaction.objectStore("new_transaction");
 
   // get all records from store and set to a variable
-  const getAll = budgetObjectStore.getAll();
+  const getAll = transactionObjectStore.getAll();
 
   // upon a successful .getAll() execution, run this function
   getAll.onsuccess = function () {
@@ -70,11 +70,12 @@ function uploadtransaction() {
           // open one more transaction
           const transaction = db.transaction(["new_transaction"], "readwrite");
           // access the new_transaction object store
-          const budgetObjectStore = transaction.objectStore("new_transaction");
+          const transactionObjectStore =
+            transaction.objectStore("new_transaction");
           // clear all items in your store
-          budgetObjectStore.clear();
+          transactionObjectStore.clear();
 
-          alert("All saved pizza has been submitted!");
+          alert("All saved transactions has been submitted!");
         })
         .catch((err) => {
           console.log(err);
