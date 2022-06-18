@@ -40,7 +40,7 @@ function saveRecord(record) {
   transactionObjectStore.add(record);
 }
 
-function uploadtransaction() {
+function uploadTransaction() {
   // open a transaction on your db
   const transaction = db.transaction(["new_transaction"], "readwrite");
 
